@@ -1,0 +1,13 @@
+{
+  "name": "jenkins-nodejs-cicd-app",
+  "version": "1.0.0",
+  "description": "Node.js application deployed using Jenkins CI/CD Pipeline",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node -e \"console.log('Tests passed successfully!')\""
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

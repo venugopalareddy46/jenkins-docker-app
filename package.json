@@ -14,5 +14,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "junit-report-builder": "^5.1.2"
   }
 }

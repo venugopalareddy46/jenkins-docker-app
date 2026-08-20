@@ -1,0 +1,144 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = 'jenkins-docker-app'
+        CONTAINER_NAME = 'jenkins-docker-app'
+        APP_PORT = '3002'
+    }
+
+    stages {
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage('Docker Image Build') {
+            steps {
+                sh '''
+                    docker build \
+                        -t ${APP_NAME}:${BUILD_NUMBER} \
+                        -t ${APP_NAME}:latest .
+                '''
+            }
+        }
+
+        stage('Docker Image Verification') {
+            steps {
+                sh '''
+                    docker images ${APP_NAME}
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    echo "Stopping previous application..."
+
+                    docker stop ${CONTAINER_NAME} || true
+
+                    echo "Removing previous application..."
+
+                    docker rm ${CONTAINER_NAME} || true
+
+                    echo "Starting new application..."
+
+                    docker run -d \
+                        --name ${CONTAINER_NAME} \
+                        -p ${APP_PORT}:3002 \
+                        ${APP_NAME}:${BUILD_NUMBER}
+
+                    echo "Deployment completed!"
+                '''
+            }
+        }
+
+        stage('Application Verification') {
+            steps {
+                sh '''
+                    echo "Waiting for application..."
+                    sleep 5
+
+                    echo "Testing deployed application..."
+
+                    curl -f http://localhost:${APP_PORT}
+
+                    echo ""
+                    echo "Application is running successfully!"
+                '''
+            }
+        }
+    }
+
+
+    post {
+
+    success {
+        echo 'Pipeline completed successfully!'
+
+        emailext(
+            subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            body: """
+                Jenkins Pipeline Successful
+
+                Job: ${env.JOB_NAME}
+                Build: ${env.BUILD_NUMBER}
+                Status: SUCCESS
+
+                Application deployment completed successfully.
+            """,
+            to: 'venugopalareddy46@gmail.com'
+        )
+    }
+
+    failure {
+        echo 'Pipeline failed!'
+
+        emailext(
+            subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            body: """
+                Jenkins Pipeline Failed
+
+                Job: ${env.JOB_NAME}
+                Build: ${env.BUILD_NUMBER}
+                Status: FAILURE
+
+                Please check the Jenkins Console Output.
+            """,
+            to: 'venugopalareddy46@gmail.com'
+        )
+    }
+
+    unstable {
+        echo 'Pipeline is unstable!'
+
+        emailext(
+            subject: "UNSTABLE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            body: """
+                Jenkins Pipeline Unstable
+
+                Job: ${env.JOB_NAME}
+                Build: ${env.BUILD_NUMBER}
+                Status: UNSTABLE
+
+                Please review the test results and warnings.
+            """,
+            to: 'venugopalareddy46@gmail.com'
+        )
+    }
+}

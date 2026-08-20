@@ -18,7 +18,7 @@ pipeline {
                 sh 'npm test'
             }
         }
-        stage('Test Reports') {
+        stage('JUnit Test Reports') {
             steps {
                 junit 'test-results.xml'
             }

@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "node --test --test-reporter=tap | tap-junit --outputFile test-results.xml",
+    "test": "node --test test/*.js --reporter=mocha-junit-reporter --reporter-options mochaFile=test-results.xml",
     "build": "echo \"Node.js application build completed successfully\""
   },
   "dependencies": {

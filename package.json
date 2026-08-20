@@ -1,0 +1,9 @@
+{
+  "name":"jenkins-nodejs-cicd-app",
+  "version":"1.0.0",
+  "description":"Node.js Express application demonstrating Jenkins CI/CD deployment",
+  "main":"app.js",
+  "scripts":{"start":"node app.js","test":"node --test"},
+  "dependencies":{"express":"^5.1.0","nodemailer":"^7.0.6"},
+  "engines":{"node":">=20"}
+}

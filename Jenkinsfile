@@ -18,36 +18,43 @@ pipeline {
                 sh 'npm test'
             }
         }
-        stage('JUnit Test Reports') {
+        stage('Docker Build') {
             steps {
-                junit 'test-results.xml'
+                sh 'docker build -t jenkins-docker-app:latest .'
             }
         }
-        stage('Credentials Test') {
-        steps {
-            withCredentials([
-                string(
-                    credentialsId: 'jenkins-secret',
-                    variable: 'DEMO_SECRET'
-                )
-            ]) {
+
+        stage('Docker Images') {
+            steps {
+                sh 'docker images'
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
                 sh '''
-                    echo "Credential ID is configured successfully"
-                    echo "Secret length: ${#DEMO_SECRET}"
+                    docker run -d --name jenkins-docker-test -p 3000:3000 jenkins-docker-app:latest
+                '''
+            }
+        }
+
+        stage('Application Verification') {
+            steps {
+                sh '''
+                    sleep 5
+                    curl -f http://localhost:3000
                 '''
             }
         }
     }
-        
-    }
 
     post {
         success {
-            echo 'Jenkins Pipeline completed successfully!'
+            echo 'Docker CI pipeline completed successfully!'
         }
 
         failure {
-            echo 'Jenkins Pipeline failed!'
+            echo 'Docker CI pipeline failed!'
         }
     }
 }

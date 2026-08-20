@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "node --test test.js",
-    "test:junit": "node --test --test-reporter=junit --test-reporter-destination=test-results.xml test.js",
+    "test": "node --test --test-reporter=junit --test-reporter-destination=test-results.xml test.js",
     "build": "echo \"Node.js application build completed successfully\""
   },
   "dependencies": {

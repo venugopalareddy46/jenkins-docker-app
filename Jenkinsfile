@@ -23,6 +23,21 @@ pipeline {
                 junit 'test-results.xml'
             }
         }
+        stage('Credentials Test') {
+        steps {
+            withCredentials([
+                string(
+                    credentialsId: 'jenkins-secret',
+                    variable: 'DEMO_SECRET'
+                )
+            ]) {
+                sh '''
+                    echo "Credential ID is configured successfully"
+                    echo "Secret length: ${#DEMO_SECRET}"
+                '''
+            }
+        }
+    }
         
     }
 

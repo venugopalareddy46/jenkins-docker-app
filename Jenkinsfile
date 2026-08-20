@@ -1,15 +1,7 @@
 pipeline {
     agent any
 
-    stages {
-
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-    
+    stages {    
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'

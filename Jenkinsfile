@@ -21,6 +21,11 @@ pipeline {
                 sh 'npm run build'
             }
         }
+        stage('unit tests') {
+            steps {
+                sh 'npm test'
+            }
+        }
     }
 
     post {

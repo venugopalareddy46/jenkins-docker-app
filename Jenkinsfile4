@@ -21,9 +21,33 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'npm test'
+        stage('Parallel Checks') {
+
+            parallel {
+
+                stage('Unit Test') {
+                    steps {
+                        sh 'npm test'
+                    }
+                }
+
+                stage('Security Check') {
+                    steps {
+                        sh '''
+                            echo "Running security check..."
+                            npm audit --audit-level=high || true
+                        '''
+                    }
+                }
+
+                stage('Code Check') {
+                    steps {
+                        sh '''
+                            echo "Running code check..."
+                            find . -maxdepth 1 -type f -print
+                        '''
+                    }
+                }
             }
         }
 

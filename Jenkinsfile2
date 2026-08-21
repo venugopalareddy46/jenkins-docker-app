@@ -88,57 +88,58 @@ pipeline {
 
     post {
 
-    success {
-        echo 'Pipeline completed successfully!'
+        success {
+            echo 'Pipeline completed successfully!'
 
-        emailext(
-            subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            body: """
-                Jenkins Pipeline Successful
+            emailext(
+                subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    Jenkins Pipeline Successful
 
-                Job: ${env.JOB_NAME}
-                Build: ${env.BUILD_NUMBER}
-                Status: SUCCESS
+                    Job: ${env.JOB_NAME}
+                    Build: ${env.BUILD_NUMBER}
+                    Status: SUCCESS
 
-                Application deployment completed successfully.
-            """,
-            to: 'venugopalareddy46@gmail.com'
-        )
-    }
+                    Application deployment completed successfully.
+                """,
+                to: 'venugopalareddy46@gmail.com'
+            )
+        }
 
-    failure {
-        echo 'Pipeline failed!'
+        failure {
+            echo 'Pipeline failed!'
 
-        emailext(
-            subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            body: """
-                Jenkins Pipeline Failed
+            emailext(
+                subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    Jenkins Pipeline Failed
 
-                Job: ${env.JOB_NAME}
-                Build: ${env.BUILD_NUMBER}
-                Status: FAILURE
+                    Job: ${env.JOB_NAME}
+                    Build: ${env.BUILD_NUMBER}
+                    Status: FAILURE
 
-                Please check the Jenkins Console Output.
-            """,
-            to: 'venugopalareddy46@gmail.com'
-        )
-    }
+                    Please check the Jenkins Console Output.
+                """,
+                to: 'venugopalareddy46@gmail.com'
+            )
+        }
 
-    unstable {
-        echo 'Pipeline is unstable!'
+        unstable {
+            echo 'Pipeline is unstable!'
 
-        emailext(
-            subject: "UNSTABLE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            body: """
-                Jenkins Pipeline Unstable
+            emailext(
+                subject: "UNSTABLE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    Jenkins Pipeline Unstable
 
-                Job: ${env.JOB_NAME}
-                Build: ${env.BUILD_NUMBER}
-                Status: UNSTABLE
+                    Job: ${env.JOB_NAME}
+                    Build: ${env.BUILD_NUMBER}
+                    Status: UNSTABLE
 
-                Please review the test results and warnings.
-            """,
-            to: 'venugopalareddy46@gmail.com'
-        )
+                    Please review the test results and warnings.
+                """,
+                to: 'venugopalareddy46@gmail.com'
+            )
+        }
     }
 }

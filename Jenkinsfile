@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = 'jenkins-docker-app'
-        CONTAINER_NAME = 'jenkins-docker-app'
+        APP_NAME = 'jenkins-docker-app4'
+        CONTAINER_NAME = 'jenkins-docker-app4'
         APP_PORT = '3004'
     }
 

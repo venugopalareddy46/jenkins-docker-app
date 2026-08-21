@@ -20,7 +20,20 @@ pipeline {
         }
         stage('Docker Build') {
             steps {
-                sh 'docker build -t jenkins-docker-app:latest .'
+                sh '''
+                    echo "Stopping previous application..."
+
+                    docker stop jenkins-docker-app:latest || true
+
+                    echo "Removing previous application..."
+
+                    docker rm jenkins-docker-app:latest || true
+
+                    echo "Starting new application..."
+
+                    docker build -t jenkins-docker-app:latest .
+
+                    '''
             }
         }
 
@@ -33,7 +46,7 @@ pipeline {
         stage('Docker Run') {
             steps {
                 sh '''
-                    docker run -d --name jenkins-docker-test -p 3000:3000 jenkins-docker-app:latest
+                    docker run -d --name jenkins-docker-app -p 3000:3000 jenkins-docker-app:latest
                 '''
             }
         }

@@ -4,7 +4,7 @@ pipeline {
     environment {
         APP_NAME = 'jenkins-docker-app'
         CONTAINER_NAME = 'jenkins-docker-app'
-        APP_PORT = '3003'
+        APP_PORT = '3004'
     }
 
     stages {

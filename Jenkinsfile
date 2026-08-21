@@ -60,7 +60,7 @@ pipeline {
 
                     docker run -d \
                         --name ${CONTAINER_NAME} \
-                        -p ${APP_PORT}:3002 \
+                        -p ${APP_PORT}:3000 \
                         ${APP_NAME}:${BUILD_NUMBER}
 
                     echo "Deployment completed!"

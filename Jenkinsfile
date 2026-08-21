@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Docker Build') {
             steps {
                 sh '''
                     echo "Stopping previous container if it exists..."

@@ -4,7 +4,7 @@ pipeline {
     environment {
         APP_NAME = 'jenkins-docker-app'
         CONTAINER_NAME = 'jenkins-docker-app'
-        APP_PORT = '3002'
+        APP_PORT = '3003'
     }
 
     stages {
@@ -45,6 +45,19 @@ pipeline {
             }
         }
 
+        stage('Approval') {
+            steps {
+                script {
+                    timeout(time: 5, unit: 'MINUTES') {
+                        input(
+                            message: 'Do you approve deployment?',
+                            ok: 'Approve Deployment'
+                        )
+                    }
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 sh '''
@@ -60,7 +73,7 @@ pipeline {
 
                     docker run -d \
                         --name ${CONTAINER_NAME} \
-                        -p ${APP_PORT}:3002 \
+                        -p ${APP_PORT}:3000 \
                         ${APP_NAME}:${BUILD_NUMBER}
 
                     echo "Deployment completed!"

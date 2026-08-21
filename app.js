@@ -2,7 +2,7 @@ const express=require("express");
 const path=require("path");
 const nodemailer=require("nodemailer");
 const app=express();
-const PORT=process.env.PORT||3000;
+const PORT=process.env.PORT||3002;
 const RECEIVER_EMAIL=process.env.RECEIVER_EMAIL||"venugopalareddy46@gmail.com";
 app.use(express.json({limit:"100kb"})); app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,"public")));

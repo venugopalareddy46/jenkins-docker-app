@@ -13,27 +13,25 @@ pipeline {
                 sh 'npm run build'
             }
         }
-        stage('unit Tests') {
+        
+        stage('Unit Tests') {
             steps {
                 sh 'npm test'
             }
         }
-        stage('Docker Build') {
+
+        stage('Build') {
             steps {
                 sh '''
-                    echo "Stopping previous application..."
+                    echo "Stopping previous container if it exists..."
+                    docker stop jenkins-docker-app || true
 
-                    docker stop jenkins-docker-app:latest || true
+                    echo "Removing previous container..."
+                    docker rm jenkins-docker-app || true
 
-                    echo "Removing previous application..."
-
-                    docker rm jenkins-docker-app:latest || true
-
-                    echo "Starting new application..."
-
+                    echo "Building new Docker image..."
                     docker build -t jenkins-docker-app:latest .
-
-                    '''
+                '''
             }
         }
 
@@ -46,6 +44,7 @@ pipeline {
         stage('Docker Run') {
             steps {
                 sh '''
+                    echo "Starting new container container instance..."
                     docker run -d --name jenkins-docker-app -p 3000:3000 jenkins-docker-app:latest
                 '''
             }
@@ -54,6 +53,7 @@ pipeline {
         stage('Application Verification') {
             steps {
                 sh '''
+                    echo "Waiting for app initialization..."
                     sleep 5
                     curl -f http://localhost:3000
                 '''
@@ -65,7 +65,6 @@ pipeline {
         success {
             echo 'Docker CI pipeline completed successfully!'
         }
-
         failure {
             echo 'Docker CI pipeline failed!'
         }
